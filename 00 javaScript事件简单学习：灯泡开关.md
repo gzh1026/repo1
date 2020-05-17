@@ -24,7 +24,5 @@
     + 这就是markdown
     + 怎么使用
 
-```javascript
-print(
-```
+
 

@@ -1,46 +1,79 @@
 # redis
-1. 概念
-    
-    * Redis是一款高性能的nosql系列的非关系型数据库
-2. 下载安装
-3. 命令操作
-    1. Redis数据结构
-        * key,value,其中key都是字符串，value有五种不同的结构：
-        1. 字符串 string
-        2. 哈希 hash : map格式
-        3. 列表 list : linkedlist
-        4. 集合 set : 不允许重复元素
-        5. 有序集合 sortedset : 不允许重复元素,且元素有顺序
-    2. 字符串类型string
-        1. 存储 set key value
-        2. 获取 get key
-        3. 删除 del key
-    3. hash类型
-        1. 存储 hset key field value
-        2. 获取 hget key field 获取制定field对应的值  /  hgetall  获取all
-        3. 删除 hdel key field
-    4. 列表list
-        1. 添加:
-            1. lpush key value 将指定的元素加入列表左边
-            2. rpush key value 将元素加入列表右边
-        2. 获取:
-            * lrange key start end :范围获取
-        3. 删除:
-            * lpop key:从列表左边删除元素,并将元素返回
-            * rpop key:从右边删除
-    5. 集合类型set:不允许重复元素
-        1. 存储:sadd key value
-        2. 获取:smembers key:获取set中所有元素
-        3. 删除:srem key value:删除set集合中某个元素
-    6. sortedset:不允许重复,元素有序
-        1. 存储:zadd key score value: 按照score排序
-        2. 获取:zrange key start end
-        3. 删除zrem key value
-    7. 通用命令:
-        1. keys * (*相当于正则表达式)查询所有的键
-        2. type key 获取value类型
-        3. del key 删除指定的key value
-4. 持久化
+
+remote dictionary server：远程字典服务器
+
+**特点：**consistency（强一致性）available（可用性）partition tolerance（分区容错性）
+
+**三个特点只能满足两个**，分区容错性必须要满足，只能在一致性和可用性之间权衡。
+
+**base**：基本可用（basically available），软状态（soft state），最终一致性（eventually consistent）：他的思想是通过让系统放松对某一时刻数据一致性的要求来换取**系统整体伸缩性和性能上的改观**。
+
+redis索引都是从0开始，默认端口都是6379
+
+**基本语法**：
+
+```redis
+查看所有数据库
+keys *
+清空当前库的所有数据库跑路
+FLUSHDB
+清空所有库的数据库跑路
+FLUSHALL
+选择数据库
+select I（int） 
+查看当前数据库key数量
+bdsize
+判断key是否存在
+exists key
+为给定的key设置过期时间
+expire key
+查看还有多少秒过期，-1表示永不过期，-2表示已过期
+ttl key
+查看key的类型
+type key
+```
+
+Redis数据结构
+
+key,value,其中key都是字符串，value有五种不同的结构：
+
+1. 字符串 **string**二进制字符安全，redis的string可以 包含任何数据，比如jpg，或者序列化的对象。一个value最多可以是512m
+2. 哈希 hash : map格式
+3. 列表 list : linkedlist
+4. 集合 set : 不允许重复元素
+5. 有序集合 sortedset : 不允许重复元素,且元素有顺序
+
+1. 字符串类型string
+    1. 存储 set key value
+    2. 获取 get key
+    3. 删除 del key
+2. hash类型
+    1. 存储 hset key field value
+    2. 获取 hget key field 获取制定field对应的值  /  hgetall  获取all
+    3. 删除 hdel key field
+3. 列表list，**底层是链表**
+    1. 添加:
+        1. lpush key value 将指定的元素加入列表左边
+        2. rpush key value 将元素加入列表右边
+    2. 获取:
+        * lrange key start end :范围获取
+    3. 删除:
+        * lpop key:从列表左边删除元素,并将元素返回
+        * rpop key:从右边删除
+4. 集合类型set:不允许重复元素，通过**hashtable**实现
+    1. 存储:sadd key value
+    2. 获取:smembers key:获取set中所有元素
+    3. 删除:srem key value:删除set集合中某个元素
+5. sortedset:不允许重复,元素有序。不同的是，每个元素前都会关联一个double类型的分数。通过分数来为集合中成员进行排序，成员唯一，分数可以重复。
+    1. 存储:zadd key score value: 按照score排序
+    2. 获取:zrange key start end
+    3. 删除zrem key value
+6. 通用命令:
+    1. keys * (*相当于正则表达式)查询所有的键
+    2. type key 获取value类型
+    3. del key 删除指定的key value
+
+1. 持久化
     1. Redis是一个内存是数据库,当Redis服务器重启,获取电脑重启数据会丢失,我们可以将Redis内存中的数据持久化到硬盘文件里.
     2. Redis持久化机制:
         1. RDB:默认配置,不用配置,默认使用此机制
@@ -60,7 +93,7 @@
             * always: fsync after every write to the append only log. Slow, Safest.
             * appendfsync ererysec：每隔一秒都进行一次持久化
 
-5. java客户端操作Redis
+2. java客户端操作Redis
     * jedis：java操纵数据库的工具。
     * 使用步骤：
         1. 下载jedis的jar包

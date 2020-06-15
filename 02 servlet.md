@@ -5,7 +5,7 @@
 * 快速入门：
     1. 创建java ee项目
     2. 定义一个类，实现servlet接口。
-        
+       
         * ` public class ServletDemo1 implements Servlet `
     3. 实现接口中的抽象方法
     4. 配置servlet
@@ -25,8 +25,8 @@
     1. 当服务器接收到客户端浏览器的请求后，会解析请求url路径，获取访问的servlet的资源路径
     2. 查找web.xml文件，是否有对应的<url-pattern>标签及内容
     3. 如果有，则找到对应的<servlet-class>全类名
-    4. tomacat会将字节码文件加载进内存，并且创建其对象
-    5. 调用其方法
+    4. tomacat会将字节码文件加载进内存，并且创建其实例对象
+    5. 实例创建过程中，自动调用其方法
 * servlet的生命周期
     1. 被创建：执行init，只执行一次
         * servlet什么时候被创建
@@ -42,7 +42,7 @@
             * 多个用户同时访问的时候，可能存在线程安全问题
             * 解决：尽量不要在servlet中定义成员变量。即使定义了，也不要对其修改值。
     2. 提供服务：执行service，执行多次
-        
+       
         * 每次访问servlet时，service方法都会被执行一次
     3. 被销毁：执行destroy，只执行一次 
         * servlet被销毁时执行，服务器关闭时，servlet被销毁。
